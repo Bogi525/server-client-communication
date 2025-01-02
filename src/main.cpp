@@ -1,8 +1,8 @@
 #include <iostream>
-#include <winsock2.h>
+#include "../inc/log.hpp"
 
 using namespace std;
 
 int main() {
-    
+    return 0;
 }
