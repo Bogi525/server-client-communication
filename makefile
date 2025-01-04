@@ -1,4 +1,7 @@
+SRC_FILES = src/main.cpp src/logEntry.cpp
+BUILD = build\main.exe
+
 all:
-	g++ src/main.cpp -o main
+	g++ $(SRC_FILES) -o $(BUILD)
 clean:
-	del main.exe
+	del $(BUILD)
