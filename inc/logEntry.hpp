@@ -6,7 +6,7 @@
 
 using namespace std;
 
-enum EntryType { MSG, CMD };
+enum EntryType { EntryTypeMSG, EntryTypeCMD };
 
 class LogEntry {
     

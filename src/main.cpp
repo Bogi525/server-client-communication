@@ -1,12 +1,13 @@
 #include <iostream>
 #include "../inc/logEntry.hpp"
-//#include "../lib/asio/asio.hpp"
+#include <asio.hpp>
 
-using namespace std;
+using asio::ip::tcp;
 
 int main() {
-    LogEntry* entry1 = new LogEntry("bla", EntryType::MSG, "blabla");
+    LogEntry* entry1 = new LogEntry("bla", EntryType::EntryTypeMSG, "blabla");
+    
     int a;
-    cin >> a;
+    std::cin >> a;
     return 0;
 }
