@@ -4,7 +4,7 @@ BUILD = build\main.exe
 all: clean build
 
 build:
-	g++ -Ilib/asio $(SRC_FILES) -o $(BUILD) -lws2_32
+	g++ -g -Ilib/asio $(SRC_FILES) -o $(BUILD) -lws2_32
 	
 clean:
 	del $(BUILD)
@@ -12,4 +12,7 @@ clean:
 open:
 	$(BUILD)
 
-.PHONY: all build clean open
+debug:
+	gdb $(BUILD)
+
+.PHONY: all build clean open debug
