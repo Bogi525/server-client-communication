@@ -3,7 +3,7 @@ CLIENT_FILES = src/main_client.cpp src/logEntry.cpp
 BUILD_SERVER = build\server.exe
 BUILD_CLIENT = build\client.exe
 
-all: clean build
+all: clean build_server build_client
 
 build_server:
 	g++ -g -Ilib/asio $(SERVER_FILES) -o $(BUILD_SERVER) -lws2_32
@@ -16,6 +16,9 @@ clean:
 
 open_server:
 	$(BUILD_SERVER)
+
+open_client:
+	$(BUILD_CLIENT)
 
 debug_server:
 	gdb $(BUILD_SERVER)
