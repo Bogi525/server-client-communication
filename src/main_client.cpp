@@ -1,4 +1,6 @@
+#include <chrono>
 #include <iostream>
+#include <thread>
 #include "../inc/logEntry.hpp"
 
 #define ASIO_STANDALONE
@@ -22,6 +24,8 @@ int main() {
 
     socket.connect(endpoint, ec);
 
+
+
     if (!ec) {
         std::cout << "Connected!\n";
     } else {
@@ -37,6 +41,7 @@ int main() {
 
         socket.write_some(asio::buffer(sRequest.data(), sRequest.size()), ec);
 
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
         size_t bytes = socket.available();
         std::cout << "Bytes Available: " << bytes << std::endl;
