@@ -13,23 +13,47 @@
 
 int main() {
     try {
-        // Initalizing ASIO error and context
-        asio::error_code ec;
-        asio::io_context context;
 
-        asio::ip::udp::socket socket(context, asio::ip::udp::endpoint(asio::ip::udp::v4(), 12345));
+        asio::io_context io_context;
 
-        char data[1024];
-        asio::ip::udp::endpoint sender_endpoint;
+        asio::ip::tcp::acceptor acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 12345));
 
-        std::cout << "Server is starting to listen for incoming traffic on port 12345";
+        std::cout << "Server is listening on port 12345...\n";
 
-        while(true) {
-            std::size_t bytes = socket.receive_from(asio::buffer(data, sizeof(data)),sender_endpoint);
-            std::string message(data, bytes);
-            std::cout << "Received message from \"" << sender_endpoint.address() << "\", size = " << bytes << ":\n";
-            std::cout << message << '\n';
+        while (true) {
+            asio::ip::tcp::socket socket(io_context);
+
+            acceptor.accept(socket);
+
+            std::cout << "Accepted connection from: "
+                << socket.remote_endpoint().address().to_string()
+                << '\n';
+
+            std::string message = "Hello from server!";
+            asio::write(socket, asio::buffer(message));
+
+            socket.close();
         }
+
+
+
+    //     // Initalizing ASIO error and context
+    //     asio::error_code ec;
+    //     asio::io_context context;
+
+    //     asio::ip::udp::socket socket(context, asio::ip::udp::endpoint(asio::ip::udp::v4(), 12345));
+
+    //     char data[1024];
+    //     asio::ip::udp::endpoint sender_endpoint;
+
+    //     std::cout << "Server is starting to listen for incoming traffic on port 12345";
+
+    //     while(true) {
+    //         std::size_t bytes = socket.receive_from(asio::buffer(data, sizeof(data)),sender_endpoint);
+    //         std::string message(data, bytes);
+    //         std::cout << "Received message from \"" << sender_endpoint.address() << "\", size = " << bytes << ":\n";
+    //         std::cout << message << '\n';
+    //     }
     } catch (std::exception& e) {
         std::cout << "Error: " << e.what() << '\n';
     }
