@@ -12,9 +12,12 @@ class LogEntry {
     
 public:
     LogEntry(string usr, EntryType typ, string msg);
+    string getUser();
+    string getTime();
+    string getMessage();
 private:
     string user;
-    int timeSent;
+    string timeSent;
     EntryType type;
     string message;
 };
