@@ -8,29 +8,56 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#define IP_DEST "93.184.216.34"
+#define SERVER_IP "192.168.0.17"
+#define LOCALHOST_IP "127.0.0.1"
 
 
 int main() {
     try {
-        // Initalizing ASIO error and context
-        asio::error_code ec;
-        asio::io_context context;
 
-        // Set the socket for IPv4 communication
-        asio::ip::udp::socket socket(context);
-        socket.open(asio::ip::udp::v4());
+        asio::io_context io_context;
 
-        // Allow LAN broadcast communication
-        asio::socket_base::broadcast option(true);
-        socket.set_option(option);
+        asio::ip::tcp::socket socket(io_context);
 
-        // Set up a broadcast endpoint
-        asio::ip::udp::endpoint broadcast_endpoint(asio::ip::address_v4::broadcast(), 12345);
+        std::string server_ip = SERVER_IP;
+        unsigned short server_port = 12345;
 
-        // Broadcasting the message across LAN
-        std::string messageToSend = "This is a broadcast message. Yippie!";
-        socket.send_to(asio::buffer(messageToSend), broadcast_endpoint);
+        asio::ip::tcp::resolver resolver(io_context);
+        auto endpoints = resolver.resolve(server_ip, std::to_string(server_port));
+        asio::connect(socket, endpoints);
+
+        std::cout << "Connected to server: " << socket.remote_endpoint().address() << ":" << socket.remote_endpoint().port() << '\n';
+
+        std::string message = "Hello from client!";
+        asio::write(socket, asio::buffer(message));
+
+        std::cout << "Sent to server: \"" << message << "\"\n";
+
+        char incoming_data[1024];
+        int data_length = socket.read_some(asio::buffer(incoming_data));
+
+        std::cout << "Received from server: \"" << std::string(incoming_data, data_length) << "\"\n";
+
+        socket.close();
+
+        // // Initalizing ASIO error and context
+        // asio::error_code ec;
+        // asio::io_context context;
+
+        // // Set the socket for IPv4 communication
+        // asio::ip::udp::socket socket(context);
+        // socket.open(asio::ip::udp::v4());
+
+        // // Allow LAN broadcast communication
+        // asio::socket_base::broadcast option(true);
+        // socket.set_option(option);
+
+        // // Set up a broadcast endpoint
+        // asio::ip::udp::endpoint broadcast_endpoint(asio::ip::address_v4::broadcast(), 12345);
+
+        // // Broadcasting the message across LAN
+        // std::string messageToSend = "This is a broadcast message. Yippie!";
+        // socket.send_to(asio::buffer(messageToSend), broadcast_endpoint);
     } catch (std::exception& e) {
         std::cout << "Error: " << e.what() << '\n';
     }

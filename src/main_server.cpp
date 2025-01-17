@@ -8,7 +8,7 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#define IP_DEST "93.184.216.34"
+#define PRIVATE_IP "192.168.0.17"
 
 
 int main() {
@@ -31,6 +31,13 @@ int main() {
 
             std::string message = "Hello from server!";
             asio::write(socket, asio::buffer(message));
+
+            std::cout << "Sent to client: \"" << message << "\"\n";
+
+            char incoming_data[1024];
+            int data_length = socket.read_some(asio::buffer(incoming_data));
+
+            std::cout << "Received from client: \"" << std::string(incoming_data, data_length) << "\"\n";
 
             socket.close();
         }
