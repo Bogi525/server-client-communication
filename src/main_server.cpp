@@ -14,6 +14,8 @@
 int main() {
     try {
 
+        vector<LogEntry> log;
+
         asio::io_context io_context;
 
         asio::ip::tcp::acceptor acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 12345));
@@ -38,6 +40,18 @@ int main() {
             int data_length = socket.read_some(asio::buffer(incoming_data));
 
             std::cout << "Received from client: \"" << std::string(incoming_data, data_length) << "\"\n";
+
+            std::cout << "\nSession successfully acknowledged!\nChat:\n";
+            
+            bool finished = false;
+
+            while(!finished) {
+                data_length = socket.read_some(asio::buffer(incoming_data));
+                LogEntry newLogEntry("User", EntryType::EntryTypeMSG, string(incoming_data, data_length));
+                std::cout << newLogEntry.getUser() << "(" << newLogEntry.getTime() << "): " << newLogEntry.getMessage() << '\n';
+
+                log.push_back(newLogEntry);
+            }
 
             socket.close();
         }

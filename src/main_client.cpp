@@ -38,6 +38,25 @@ int main() {
 
         std::cout << "Received from server: \"" << std::string(incoming_data, data_length) << "\"\n";
 
+        std::string output_message;
+        bool finished = false;
+
+        while(!finished) {
+            std::cout << "Input:";
+            std::getline(std::cin, output_message);
+            if (output_message.length() > 1024) {
+                cout << "Message must have less than 1024 characters!\n";
+                continue;
+            } else if (output_message == "!finish") {
+                cout << "Finishing communication!\n";
+                finished = true;
+                break;
+            } else {
+                asio::write(socket, asio::buffer(output_message));
+                std::cout << "Sent!\n";
+            }
+        }
+
         socket.close();
 
         // // Initalizing ASIO error and context
