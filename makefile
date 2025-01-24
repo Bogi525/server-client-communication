@@ -1,4 +1,4 @@
-SERVER_FILES = src/main_server.cpp src/logEntry.cpp
+SERVER_FILES = src/main_server.cpp src/logEntry.cpp src/user.cpp
 CLIENT_FILES = src/main_client.cpp src/logEntry.cpp
 BUILD_SERVER = build\server.exe
 BUILD_CLIENT = build\client.exe
