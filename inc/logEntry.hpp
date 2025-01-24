@@ -6,19 +6,16 @@
 
 using namespace std;
 
-enum EntryType { EntryTypeMSG, EntryTypeCMD };
-
 class LogEntry {
     
 public:
-    LogEntry(string usr, EntryType typ, string msg);
+    LogEntry(string usr, string msg);
     string getUser();
     string getTime();
     string getMessage();
 private:
     string user;
     string timeSent;
-    EntryType type;
     string message;
 };
 
