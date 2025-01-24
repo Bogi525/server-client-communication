@@ -1,7 +1,9 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <map>
 #include "../inc/logEntry.hpp"
+#include "../inc/user.hpp"
 
 #define ASIO_STANDALONE
 #include <asio.hpp>
@@ -12,6 +14,7 @@
 
 
 int main() {
+    vector<User> registered_users;
     try {
 
         vector<LogEntry> log;
@@ -22,7 +25,9 @@ int main() {
 
         std::cout << "Server is listening on port 12345...\n";
 
-        while (true) {
+        bool finished = false;
+
+        while (!finished) {
             asio::ip::tcp::socket socket(io_context);
 
             acceptor.accept(socket);
@@ -41,14 +46,58 @@ int main() {
 
             std::cout << "Received from client: \"" << std::string(incoming_data, data_length) << "\"\n";
 
+            bool found = false;
+            User curr_user;
+
+            for (User user: registered_users) {
+
+                string curr_ip = socket.remote_endpoint().address().to_string();
+
+                if (curr_ip == user.getUserIp()) {
+                    found = true;
+                    curr_user = user;
+                    break;
+                } 
+            }
+
+            // Delete later
+            found = true;
+            curr_user = User("abc", "abc", "abc");
+
+            if (found) {
+                std::cout << "Asking for password...\n";
+                message = "Login";
+
+                asio::write(socket, asio::buffer(message));
+                for (int i = 0; i < 3; i++) {
+                    data_length = socket.read_some(asio::buffer(incoming_data));
+
+                    if (std::string(incoming_data, data_length) == curr_user.getPassword()) {
+                        std::cout << "Client input: " << std::string(incoming_data, data_length) << '\n';
+                        std::cout << "Correct password!";
+
+                        asio::write(socket, asio::buffer("OK"));
+
+                        break;
+                    }
+                    else if (i != 2) {
+                        std::cout << "Client input: " << std::string(incoming_data, data_length) << '\n';
+                        std::cout << 2 - i << " more tries.\n";
+
+                        asio::write(socket, asio::buffer("NOTOK"));
+
+                    } else {
+                        finished = true;
+                        socket.close();
+                    }
+                }  
+            }
+
             std::cout << "\nSession successfully acknowledged!\nChat:\n";
-            
-            bool finished = false;
 
             while(!finished) {
-
                 data_length = socket.read_some(asio::buffer(incoming_data));
-                LogEntry newLogEntry("User", EntryType::EntryTypeMSG, string(incoming_data, data_length));
+                LogEntry newLogEntry("User", string(incoming_data, data_length));
                 std::cout << newLogEntry.getUser() << "(" << newLogEntry.getTime() << "): " << newLogEntry.getMessage() << '\n';
 
                 log.push_back(newLogEntry);
