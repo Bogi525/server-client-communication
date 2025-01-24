@@ -1,6 +1,7 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <chrono>
 #include "../inc/logEntry.hpp"
 
 #define ASIO_STANDALONE
@@ -55,11 +56,10 @@ int main() {
                 std::string incoming_message = std::string(incoming_data, data_length);
                 std::cout << "From server: '" << incoming_message << "'\n";
 
-                if (incoming_message == "OK") {
+                if (incoming_message == "Correct") {
                     std::cout << "Connected!\n";
                     break;
                 } else if (i != 2) {
-                    std::cout << "'" << incoming_message << "'\n";
                     std::cout << 2 - i << " more tries.\n";
                     std::cout << "Try again: ";
                 } else {

@@ -76,7 +76,9 @@ int main() {
                         std::cout << "Client input: " << std::string(incoming_data, data_length) << '\n';
                         std::cout << "Correct password!";
 
-                        asio::write(socket, asio::buffer("OK"));
+                        message = "Correct";
+
+                        asio::write(socket, asio::buffer(message));
 
                         break;
                     }
@@ -84,7 +86,9 @@ int main() {
                         std::cout << "Client input: " << std::string(incoming_data, data_length) << '\n';
                         std::cout << 2 - i << " more tries.\n";
 
-                        asio::write(socket, asio::buffer("NOTOK"));
+                        message = "Wrong";
+
+                        asio::write(socket, asio::buffer(message));
 
                     } else {
                         finished = true;
