@@ -49,20 +49,20 @@ int main() {
             bool found = false;
             User curr_user;
 
-            for (User user: registered_users) {
+            // for (User user: registered_users) {
 
-                string curr_ip = socket.remote_endpoint().address().to_string();
+            //     string curr_ip = socket.remote_endpoint().address().to_string();
 
-                if (curr_ip == user.getUserIp()) {
-                    found = true;
-                    curr_user = user;
-                    break;
-                } 
-            }
+            //     if (curr_ip == user.getUserIp()) {
+            //         found = true;
+            //         curr_user = user;
+            //         break;
+            //     } 
+            // }
 
-            // Delete later
-            found = true;
-            curr_user = User("abc", "abc", "abc");
+            // // Delete later
+            // found = true;
+            // curr_user = User("abc", "abc", "abc");
 
             if (found) {
                 std::cout << "Asking for password...\n";
@@ -102,7 +102,7 @@ int main() {
             while(!finished) {
                 data_length = socket.read_some(asio::buffer(incoming_data));
                 LogEntry newLogEntry("User", string(incoming_data, data_length));
-                std::cout << newLogEntry.getUser() << "(" << newLogEntry.getTime() << "): " << newLogEntry.getMessage() << '\n';
+                newLogEntry.print();
 
                 log.push_back(newLogEntry);
             }
