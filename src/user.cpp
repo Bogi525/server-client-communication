@@ -1,9 +1,8 @@
 #include "../inc/user.hpp"
 
-User::User(string a, string b, string c) {
+User::User(string a, string b) {
     username = a;
     password = b;
-    user_ip = c;
 }
 
 string User::getUsername() {
@@ -12,8 +11,4 @@ string User::getUsername() {
 
 string User::getPassword() {
     return password;
-}
-
-string User::getUserIp() {
-    return user_ip;
 }

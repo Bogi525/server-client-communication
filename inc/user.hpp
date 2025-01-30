@@ -8,14 +8,12 @@ using namespace std;
 class User {
 public:
     User() {};
-    User(string, string, string);
+    User(string, string);
     string getUsername();
     string getPassword();
-    string getUserIp();
 private:
     string username;
     string password;
-    string user_ip;
 };
 
 
