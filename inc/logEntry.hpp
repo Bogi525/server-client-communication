@@ -13,6 +13,7 @@ public:
     string getUser();
     string getTime();
     string getMessage();
+    void print();
 private:
     string user;
     string timeSent;

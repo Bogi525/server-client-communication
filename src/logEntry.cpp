@@ -20,3 +20,7 @@ string LogEntry::getTime() {
 string LogEntry::getMessage() {
     return message;
 }
+
+void LogEntry::print() {
+    std::cout << this->user << " (" << this->timeSent << ") : " << this->message << '\n';
+}
