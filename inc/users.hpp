@@ -6,21 +6,26 @@
 #include <vector>
 #include "user.hpp"
 
-
 class Users {
 public:
+
     Users();
 
-    //Users(const Users&) = delete;
-    //Users& operator=(const Users&) = delete;
+    Users(const Users&) = delete;
+    Users& operator=(const Users&) = delete;
+
+    std::vector<User> getAllUsers();
     
     User getUser(std::string username);
     bool createUser(std::string username, std::string password);
     
 private:
+
     bool addUserToFile(std::string username, std::string password);
+
     std::vector<User> users;
     User nullUser;
+
 };
 
 #endif

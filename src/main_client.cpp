@@ -1,7 +1,4 @@
-#include <chrono>
 #include <iostream>
-#include <thread>
-#include <chrono>
 #include "../inc/logEntry.hpp"
 
 #define ASIO_STANDALONE

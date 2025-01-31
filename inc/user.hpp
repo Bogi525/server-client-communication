@@ -3,17 +3,19 @@
 
 #include <iostream>
 
-using namespace std;
-
 class User {
 public:
-    User() {};
-    User(string, string);
-    string getUsername();
-    string getPassword();
+
+    User(std::string, std::string);
+
+    std::string getUsername();
+    std::string getPassword();
+
 private:
-    string username;
-    string password;
+
+    std::string username;
+    std::string password;
+
 };
 
 

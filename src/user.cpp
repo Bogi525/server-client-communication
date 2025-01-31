@@ -1,14 +1,14 @@
 #include "../inc/user.hpp"
 
-User::User(string a, string b) {
+User::User(std::string a, std::string b) {
     username = a;
     password = b;
 }
 
-string User::getUsername() {
+std::string User::getUsername() {
     return username;
 }
 
-string User::getPassword() {
+std::string User::getPassword() {
     return password;
 }
