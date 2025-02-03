@@ -81,6 +81,7 @@
         "xloctime": "cpp",
         "xtree": "cpp",
         "fstream": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "*.ipp": "cpp"
     }
 }
