@@ -130,49 +130,66 @@ int old_main() {
     return 0;
 }
 
-void establishConnection(asio::io_context& io_context, asio::ip::tcp::acceptor& acceptor) {
-    asio::ip::tcp::socket socket(io_context);
-
-    acceptor.accept(socket);
-
-    std::cout << "Accepted connection from: "
-        << socket.remote_endpoint().address().to_string()
-        << '\n';
-
-    std::string message = "Hello from server!";
-    asio::write(socket, asio::buffer(message));
-
-    std::cout << "Sent to client: \"" << message << "\"\n";
-
-    char incoming_data[1024];
-    int data_length = socket.read_some(asio::buffer(incoming_data));
-
-    std::cout << "Received from client: \"" << std::string(incoming_data, data_length) << "\"\n";
-}
-
 int main() {
      try {
+
+        // Initializing variables
         Users users;
+
+        std::string output_message = "";
+
+        std::string incoming_message = "";
 
         asio::io_context io_context;
 
         asio::ip::tcp::acceptor acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 12345));
 
+        asio::ip::tcp::socket socket(io_context);
+
+        char incoming_data[1024];
+        int data_length = 0;
+
         std::cout << "Server is listening on port 12345...\n";
 
-        bool finished = false;
 
-        while (!finished) {
+        // Establishing TCP connection
+        acceptor.accept(socket);
 
-            establishConnection(io_context, acceptor);
+        std::cout << "Accepted connection from: "
+            << socket.remote_endpoint().address().to_string()
+            << '\n';
 
-            // TODO - userChoice (login/register)
-            // TODO - login
-            // TODO - or register
-            // TODO - messaging
+        output_message = "Hello from server!";
+        asio::write(socket, asio::buffer(output_message));
 
-            bool found;
+        std::cout << "Sent to client: \"" << output_message << "\"\n";
+
+        data_length = socket.read_some(asio::buffer(incoming_data));
+
+        std::cout << "Received from client: \"" << std::string(incoming_data, data_length) << "\"\n";
+
+
+        // User chooses whether he is logging in or registering
+        bool userChoice = false;
+
+        output_message = "Choose";
+        asio::write(socket, asio::buffer(output_message));
+
+        data_length = socket.read_some(asio::buffer(incoming_data));
+
+        incoming_message = std::string(incoming_data, data_length);
+
+        if (incoming_message == "Login") userChoice = true;
+        else userChoice = false;
+
+        if (userChoice) {
+            // Logging in
+        } else {
+            // Registering
         }
+
+        // TODO - messaging
+
      } catch (std::exception& e) {
         std::cout << "Error: " << e.what() << '\n';
      }
