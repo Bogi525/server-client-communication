@@ -94,3 +94,7 @@ bool Users::addUserToFile(std::string username, std::string password) {
 
     return true;
 }
+
+User Users::getNullUser() {
+    return nullUser;
+}

@@ -15,6 +15,8 @@ public:
     Users& operator=(const Users&) = delete;
 
     std::vector<User> getAllUsers();
+
+    User getNullUser();
     
     User getUser(std::string username);
     bool createUser(std::string username, std::string password);
