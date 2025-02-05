@@ -141,6 +141,8 @@ int main() {
         // Initializing variables
         Users users;
 
+        User connected_user = users.getNullUser();
+
         std::string output_message = "";
         
         char incoming_data[1024];
@@ -185,6 +187,7 @@ int main() {
         if (incoming_message == "Login") userChoice = true;
 
         if (userChoice) {
+            // Logging in
 
             // Choosing a username for logging in
             bool userFound = false;
@@ -197,7 +200,7 @@ int main() {
                 data_length = socket.read_some(asio::buffer(incoming_data));
                 incoming_message = std::string(incoming_data, data_length);
 
-                User connected_user = users.getNullUser();
+                connected_user = users.getNullUser();
 
                 for (User user: users.getAllUsers()) {
                     if (incoming_message == user.getUsername()) {
@@ -209,7 +212,8 @@ int main() {
                 }
             }
             
-            // TODO: Ask for password
+
+            // Password check
             bool correctPassword = false;
 
             int counter = 0;
@@ -219,10 +223,38 @@ int main() {
                 output_message = "Password";
                 asio::write(socket, asio::buffer(output_message));
 
+                data_length = socket.read_some(asio::buffer(incoming_data));
+                incoming_message = std::string(incoming_data, data_length);
+
+                if (incoming_message == connected_user.getPassword()) {
+                    correctPassword = true;
+                    break;
+                }
+
+                counter++;
             }
 
-            std::cout << incoming_message << "\t(R)\n";
-            checkpointCheck();
+
+            // User inputted wrong password 3 times
+            if (!correctPassword) {
+
+                output_message = "Denied";
+                asio::write(socket,asio::buffer(output_message));
+
+                socket.close();
+
+                std::cout << "Wrong password 3 times\n";
+
+                system("pause");
+
+                return 0;
+            }
+
+
+            // Correct password
+            output_message = "Accept";
+            asio::write(socket, asio::buffer(output_message));
+
 
         } else {
 
@@ -241,9 +273,14 @@ int main() {
 
         // TODO - messaging
 
+        std::cout << incoming_message << "\t(R)\n";
+        checkpointCheck();
+
         system("pause");
 
      } catch (std::exception& e) {
         std::cout << "Error: " << e.what() << '\n';
      }
+     
+     return 0;
 }

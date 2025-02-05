@@ -90,16 +90,71 @@ int main() {
             }
 
             // Checking Password
+            int counter = 0;
+
+            std::cout << "Password: ";
+
             while (incoming_message == "Password") {
-                
+
+                if (counter > 0) {
+                    std::cout << "Wrong password, try again (" << 3 - counter << " tries left): ";
+                }
+
+                std::cin >> output_message;
+                asio::write(socket, asio::buffer(output_message));
+
+                data_length = socket.read_some(asio::buffer(incoming_data));
+                incoming_message = std::string(incoming_data, data_length);
+
+                counter++;
+            }
+
+            if (incoming_message == "Denied") {
+
+                std::cout << "You inserted wrong password 3 times. Quitting...";
+
+                socket.close();
+
+                system("pause");
+
+                return 0;
             }
 
         } else if (output_message == "Register") {
 
         }
-        // TODO: Login/Register
+
 
         // TODO: Chat
+        if (!finished) {
+
+            std::cout << "Type !finish to exit session.\n";
+            std::cout << "Type anything else to send a message to server.\n";
+
+            while(!finished) {
+
+                std::cout << "Input: ";
+                std::getline(std::cin, output_message);
+
+                if (output_message.length() > 1024) {
+
+                    cout << "Message must have less than 1024 characters!\n";
+                    continue;
+
+                } else if (output_message == "!finish") {
+                    
+                    cout << "Finishing communication!\n";
+                    finished = true;
+                    break;
+                    
+                } else {
+                    asio::write(socket, asio::buffer(output_message));
+                    std::cout << "Sent!\n";
+                }
+            }
+
+            socket.close();
+        }
 
         /*
         data_length = socket.read_some(asio::buffer(incoming_data));
@@ -134,34 +189,7 @@ int main() {
             // TODO - registration
         }
 
-        if (!finished) {
-            std::cout << "Type !finish to exit session.\n\
-                Type anything else to send a message to server.\n";
-
-            while(!finished) {
-
-                std::cout << "Input: ";
-                std::getline(std::cin, output_message);
-
-                if (output_message.length() > 1024) {
-
-                    cout << "Message must have less than 1024 characters!\n";
-                    continue;
-
-                } else if (output_message == "!finish") {
-                    
-                    cout << "Finishing communication!\n";
-                    finished = true;
-                    break;
-                    
-                } else {
-                    asio::write(socket, asio::buffer(output_message));
-                    std::cout << "Sent!\n";
-                }
-            }
-
-            socket.close();
-        }
+        
         */
         
 
