@@ -12,40 +12,105 @@
 
 int main() {
     try {
+
+        // Initializing data
+        std::string server_ip = LOCALHOST_IP;
+
+        std::string output_message = "";
+
+        char incoming_data[1024];
+        int data_length = 0;
+        std::string incoming_message = "";
+
         asio::io_context io_context;
 
         asio::ip::tcp::socket socket(io_context);
-
-        std::string server_ip = SERVER_IP;
+        
         unsigned short server_port = 12345;
 
         asio::ip::tcp::resolver resolver(io_context);
         auto endpoints = resolver.resolve(server_ip, std::to_string(server_port));
+
+        
+        // Establishing TCP connection
         asio::connect(socket, endpoints);
 
         std::cout << "Connected to server: " << socket.remote_endpoint().address() << ":" << socket.remote_endpoint().port() << '\n';
-
-        char incoming_data[1024];
-        int data_length = socket.read_some(asio::buffer(incoming_data));
+        
+        data_length = socket.read_some(asio::buffer(incoming_data));
 
         std::cout << "Received from server: \"" << std::string(incoming_data, data_length) << "\"\n";
 
-        std::string message = "Hello from client!";
-        asio::write(socket, asio::buffer(message));
+        output_message = "Hello from client!";
+        asio::write(socket, asio::buffer(output_message));
 
-        std::cout << "Sent to server: \"" << message << "\"\n";
+        std::cout << "Sent to server: \"" << output_message << "\"\n";
 
         bool finished = false;
 
+
+        // User choice
+        data_length = socket.read_some(asio::buffer(incoming_data));
+
+        incoming_message = std::string(incoming_data, data_length);
+
+        if (incoming_message != "Choose") {
+            std::cout << "Error: Server sent unexpected message\n";
+            system("pause");
+        }
+        do {
+            std::cout << "Choose whether you want to login or register by typing:\n";
+            std::cout << "\"Login\" or \"Register\": ";
+            std::cin >> output_message;
+        } while (output_message != "Login" && output_message != "Register");
+        
+        asio::write(socket, asio::buffer(output_message));
+        
+        if (output_message == "Login") {
+            
+            // Finding username
+            bool userFound = false;
+
+            while (!userFound) {
+
+                data_length = socket.read_some(asio::buffer(incoming_data));
+                incoming_message = std::string(incoming_data, data_length);
+
+                std::cout << "Username: ";
+
+                std::cin >> output_message;
+                asio::write(socket, asio::buffer(output_message));
+
+                data_length = socket.read_some(asio::buffer(incoming_data));
+                incoming_message = std::string(incoming_data, data_length);
+
+                if (incoming_message == "Password") {
+                    userFound = true;
+                }
+            }
+
+            // Checking Password
+            while (incoming_message == "Password") {
+                
+            }
+
+        } else if (output_message == "Register") {
+
+        }
+        // TODO: Login/Register
+
+        // TODO: Chat
+
+        /*
         data_length = socket.read_some(asio::buffer(incoming_data));
 
         if (std::string(incoming_data, data_length) == "Login") {
             std::cout << "Insert password: ";
 
             for (int i = 0; i < 3; i++) {
-                std::getline(std::cin, message);
+                std::getline(std::cin, output_message);
 
-                asio::write(socket, asio::buffer(message));
+                asio::write(socket, asio::buffer(output_message));
 
                 data_length = socket.read_some(asio::buffer(incoming_data));
 
@@ -76,28 +141,28 @@ int main() {
             while(!finished) {
 
                 std::cout << "Input: ";
-                std::getline(std::cin, message);
+                std::getline(std::cin, output_message);
 
-                if (message.length() > 1024) {
+                if (output_message.length() > 1024) {
 
                     cout << "Message must have less than 1024 characters!\n";
                     continue;
 
-                } else if (message == "!finish") {
+                } else if (output_message == "!finish") {
                     
                     cout << "Finishing communication!\n";
                     finished = true;
                     break;
                     
                 } else {
-                    asio::write(socket, asio::buffer(message));
+                    asio::write(socket, asio::buffer(output_message));
                     std::cout << "Sent!\n";
                 }
             }
 
             socket.close();
         }
-
+        */
         
 
     } catch (std::exception& e) {

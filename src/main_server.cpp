@@ -130,6 +130,11 @@ int old_main() {
     return 0;
 }
 
+void checkpointCheck() {
+    std::cout << "Checkpoint\n";
+    system("pause");
+}
+
 int main() {
      try {
 
@@ -137,7 +142,9 @@ int main() {
         Users users;
 
         std::string output_message = "";
-
+        
+        char incoming_data[1024];
+        int data_length = 0;
         std::string incoming_message = "";
 
         asio::io_context io_context;
@@ -145,9 +152,6 @@ int main() {
         asio::ip::tcp::acceptor acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 12345));
 
         asio::ip::tcp::socket socket(io_context);
-
-        char incoming_data[1024];
-        int data_length = 0;
 
         std::cout << "Server is listening on port 12345...\n";
 
@@ -176,19 +180,68 @@ int main() {
         asio::write(socket, asio::buffer(output_message));
 
         data_length = socket.read_some(asio::buffer(incoming_data));
-
         incoming_message = std::string(incoming_data, data_length);
 
         if (incoming_message == "Login") userChoice = true;
-        else userChoice = false;
 
         if (userChoice) {
-            // Logging in
+
+            // Choosing a username for logging in
+            bool userFound = false;
+
+            while (userFound == false) {
+
+                output_message = "Login";
+                asio::write(socket, asio::buffer(output_message));
+
+                data_length = socket.read_some(asio::buffer(incoming_data));
+                incoming_message = std::string(incoming_data, data_length);
+
+                User connected_user = users.getNullUser();
+
+                for (User user: users.getAllUsers()) {
+                    if (incoming_message == user.getUsername()) {
+
+                        connected_user = user;
+                        userFound = true;
+
+                    }
+                }
+            }
+            
+            // TODO: Ask for password
+            bool correctPassword = false;
+
+            int counter = 0;
+
+            while (!correctPassword && counter < 3) {
+
+                output_message = "Password";
+                asio::write(socket, asio::buffer(output_message));
+
+            }
+
+            std::cout << incoming_message << "\t(R)\n";
+            checkpointCheck();
+
         } else {
+
             // Registering
+            bool userFound = true;
+
+            output_message = "Register";
+            asio::write(socket, asio::buffer(output_message));
+
+            data_length = socket.read_some(asio::buffer(incoming_data));
+            incoming_message = std::string(incoming_data, data_length);
+
+            std::cout << incoming_message << "\t(R)\n";
+            checkpointCheck();
         }
 
         // TODO - messaging
+
+        system("pause");
 
      } catch (std::exception& e) {
         std::cout << "Error: " << e.what() << '\n';
