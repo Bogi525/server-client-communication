@@ -1,7 +1,8 @@
 #include <iostream>
 #include "../inc/logEntry.hpp"
+#include "../inc/client.hpp"
 
-#define ASIO_STANDALONE
+// #define ASIO_STANDALONE
 #include <asio.hpp>
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
@@ -14,6 +15,7 @@ int main() {
     try {
 
         // Initializing data
+        
         std::string server_ip = LOCALHOST_IP;
 
         std::string output_message = "";

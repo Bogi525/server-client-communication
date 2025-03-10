@@ -235,7 +235,7 @@ int main() {
             }
 
 
-            // User inputted wrong password 3 times
+            // User wrote wrong password 3 times
             if (!correctPassword) {
 
                 output_message = "Denied";
