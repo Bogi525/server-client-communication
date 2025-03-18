@@ -158,43 +158,6 @@ int main() {
             socket.close();
         }
 
-        /*
-        data_length = socket.read_some(asio::buffer(incoming_data));
-
-        if (std::string(incoming_data, data_length) == "Login") {
-            std::cout << "Insert password: ";
-
-            for (int i = 0; i < 3; i++) {
-                std::getline(std::cin, output_message);
-
-                asio::write(socket, asio::buffer(output_message));
-
-                data_length = socket.read_some(asio::buffer(incoming_data));
-
-
-                std::string incoming_message = std::string(incoming_data, data_length);
-                std::cout << "From server: '" << incoming_message << "'\n";
-
-                if (incoming_message == "Correct") {
-                    std::cout << "Connected!\n";
-                    break;
-                } else if (i != 2) {
-                    std::cout << 2 - i << " more tries.\n";
-                    std::cout << "Try again: ";
-                } else {
-                    finished = true;
-                    socket.close();
-                    break;
-                }
-            }
-        } else {
-            // TODO - registration
-        }
-
-        
-        */
-        
-
     } catch (std::exception& e) {
         std::cout << "Error: " << e.what() << '\n';
     }
