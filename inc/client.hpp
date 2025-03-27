@@ -7,11 +7,10 @@
 #include <string>
 #include <asio.hpp>
 
-
-
 #define LOCALHOST_IP "127.0.0.1"
+#define SERVER_PORT 12345
+#define BUFFER_SIZE 1024
 
-// singleton
 class Client {
 public:
 
@@ -36,7 +35,7 @@ private:
     std::string server_ip;
 
     std::string output_message;
-    char incoming_data[1024];
+    char incoming_data[BUFFER_SIZE];
     int data_length;
     std::string incoming_message;
 

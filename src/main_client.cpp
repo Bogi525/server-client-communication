@@ -2,14 +2,11 @@
 #include "../inc/logEntry.hpp"
 #include "../inc/client.hpp"
 
-// #define ASIO_STANDALONE
 #include <asio.hpp>
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#define SERVER_IP "192.168.0.17"
 #define LOCALHOST_IP "127.0.0.1"
-
 
 int main() {
     try {

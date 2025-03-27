@@ -3,7 +3,7 @@
 
 #define FILEPATH "users.csv"
 
-Users::Users() : nullUser("/NULLUSERNAME", "/NULLPASSWORD") {
+Users::Users() : nullUser(NULL_DATA, NULL_DATA) {
 
     std::fstream file(FILEPATH, std::ios_base::in);
 
@@ -52,7 +52,7 @@ std::vector<User> Users::getAllUsers() {
 
 User Users::getUser(std::string username) {
 
-    if (username == "/NULLUSERNAME") return nullUser;
+    if (username == NULL_DATA) return nullUser;
 
     for (int i = 0; i < users.size(); i++) {
         if (users[i].getUsername() == username) return users[i];
@@ -63,7 +63,7 @@ User Users::getUser(std::string username) {
 
 bool Users::createUser(std::string username, std::string password) {
 
-    if (username == "/NULLUSERNAME") return false;
+    if (username == NULL_DATA) return false;
 
     for (int i = 0; i < users.size(); i++) {
         if (users[i].getUsername() == username) return false;

@@ -3,8 +3,11 @@
 
 #include <iostream>
 
+#define NULL_DATA "/NULL/"
+
 class User {
 public:
+    User();
 
     User(std::string, std::string);
 

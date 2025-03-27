@@ -7,7 +7,7 @@ Client::Client() : io_context(), socket(io_context), resolver(io_context) {
     data_length = 0;
     incoming_message = "";
 
-    server_port = 12345;
+    server_port = SERVER_PORT;
 
     endpoints = resolver.resolve(server_ip, std::to_string(server_port));
 }
