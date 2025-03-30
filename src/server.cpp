@@ -52,13 +52,11 @@ bool Server::loginUser() {
 
     while (userFound == false) {
 
-        output_message = "Login";
+        output_message = "Username Request";
         asio::write(socket, asio::buffer(output_message));
 
         data_length = socket.read_some(asio::buffer(incoming_data));
         incoming_message = std::string(incoming_data, data_length);
-
-        connected_user = users.getNullUser();
 
         for (User user: users.getAllUsers()) {
             if (incoming_message == user.getUsername()) {
@@ -70,6 +68,8 @@ bool Server::loginUser() {
         }
     }
 
+    std::cout << "Username: " << connected_user.getUsername() << '\n';
+
     // Password check
     bool correctPassword = false;
 
@@ -77,7 +77,7 @@ bool Server::loginUser() {
 
     while (!correctPassword && counter < 3) {
 
-        output_message = "Password";
+        output_message = "Password Request";
         asio::write(socket, asio::buffer(output_message));
 
         data_length = socket.read_some(asio::buffer(incoming_data));
@@ -107,7 +107,7 @@ bool Server::loginUser() {
 
 
     // Correct password
-    output_message = "Accept";
+    output_message = "Accepted";
     asio::write(socket, asio::buffer(output_message));
 
     return true;

@@ -62,57 +62,35 @@ void Client::userChoice() {
 bool Client::loginUser() {
     std::cout << "Logging in...\n";
 
-    // Finding username
-    bool userFound = false;
-
-    while (!userFound) {
+    do {
 
         data_length = socket.read_some(asio::buffer(incoming_data));
         incoming_message = std::string(incoming_data, data_length);
 
-        std::cout << "Username: ";
+        if (incoming_message == "Username Request") {
 
-        std::cin >> output_message;
-        asio::write(socket, asio::buffer(output_message));
+            std::cout << "Username: ";
 
-        data_length = socket.read_some(asio::buffer(incoming_data));
-        incoming_message = std::string(incoming_data, data_length);
+            std::cin >> output_message;
+            asio::write(socket, asio::buffer(output_message));
 
-        if (incoming_message == "Password") {
-            userFound = true;
-        }
-    }
+        } else if (incoming_message == "Password Request") {
 
-    // Checking password
-    int counter = 0;
+            std::cout << "Password: ";
 
-    std::cout << "Password: ";
+            std::cin >> output_message;
+            asio::write(socket, asio::buffer(output_message));
 
-    while (incoming_message == "Password") {
+        } else if (incoming_message == "Denied") {
 
-        if (counter > 0) {
-            std::cout << "Wrong password, try again (" << 3 - counter << " tries left): ";
-        }
+            std::cout << "You inserted wrong password 3 times. Quitting...\n";
+            
+            return false;
+        } else if (incoming_message == "Accepted") {
+            break;
+        } else throw std::exception();
 
-        std::cin >> output_message;
-        asio::write(socket, asio::buffer(output_message));
-
-        data_length = socket.read_some(asio::buffer(incoming_data));
-        incoming_message = std::string(incoming_data, data_length);
-
-        counter++;
-    }
-
-    if (incoming_message == "Denied") {
-
-        std::cout << "You inserted wrong password 3 times. Quitting...";
-
-        socket.close();
-
-        system("pause");
-
-        return false;
-    }
+    } while (true);
 
     return true;
 }
