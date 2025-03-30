@@ -20,6 +20,12 @@ public:
 
     void establishTCPConnection();
 
+    void userChoice();
+
+    bool loginUser();
+
+    void registerUser();
+
 private:
     Server();
 

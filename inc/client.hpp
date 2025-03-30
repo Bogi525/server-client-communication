@@ -23,8 +23,11 @@ public:
 
     void userChoice();
 
+
+    // TODO: Fix
     bool loginUser();
 
+    // TODO: Implement
     void registerUser();
 
 private:

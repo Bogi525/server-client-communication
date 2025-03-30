@@ -38,15 +38,20 @@ void Client::userChoice() {
         std::cout << "Error: Server sent unexpected message\n";
         system("pause");
     }
+
+    std::string choiceString = "Register Request";
+    
     do {
         std::cout << "Choose whether you want to login or register by typing:\n";
         std::cout << "\"Login\" or \"Register\": ";
-        std::cin >> output_message;
-    } while (output_message != "Login" && output_message != "Register");
+        std::cin >> choiceString;
+    } while (choiceString != "Login" && choiceString != "Register");
+
+    if (choiceString == "Login") output_message = "Login Request";
     
     asio::write(socket, asio::buffer(output_message));
 
-    if (output_message == "Login") { 
+    if (output_message == "Login Request") { 
         loginUser();
     } else { 
         registerUser();
@@ -55,6 +60,7 @@ void Client::userChoice() {
 
 
 bool Client::loginUser() {
+    std::cout << "Logging in...\n";
 
     // Finding username
     bool userFound = false;
@@ -113,5 +119,5 @@ bool Client::loginUser() {
 
 
 void Client::registerUser() {
-
+    std::cout << "Registering...\n";
 }
