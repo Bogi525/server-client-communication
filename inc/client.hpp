@@ -2,6 +2,7 @@
 #define _client_hpp_
 
 #define ASIO_STANDALONE
+#define DEBUG_MESSAGES
 
 #include <iostream>
 #include <string>
@@ -23,17 +24,18 @@ public:
 
     void userChoice();
 
-
-    // TODO: Fix
     bool loginUser();
 
     // TODO: Implement
     void registerUser();
 
 private:
-    Client();
 
+    Client();
     ~Client() = default;
+
+    std::string receiveMessage();
+    std::string sendMessage(std::string);
 
     std::string server_ip;
 

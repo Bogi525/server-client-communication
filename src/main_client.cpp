@@ -14,6 +14,8 @@ int main() {
         Client::get().establishTCPConnection();
 
         Client::get().userChoice();
+
+        std::cout << "Chatting...\n";
         
         // // TODO: Chat
         // if (!finished) {

@@ -17,25 +17,22 @@ void Server::establishTCPConnection() {
         << socket.remote_endpoint().address().to_string()
         << '\n';
 
-    output_message = "Hello from server!";
-    asio::write(socket, asio::buffer(output_message));
+    output_message = sendMessage("Hello from server!");
 
     std::cout << "Sent to client: \"" << output_message << "\"\n";
 
-    data_length = socket.read_some(asio::buffer(incoming_data));
+    receiveMessage();
 
-    std::cout << "Received from client: \"" << std::string(incoming_data, data_length) << "\"\n";
+    std::cout << "Received from client: \"" << incoming_message << "\"\n";
 }
 
 
 void Server::userChoice() {
     bool userChoice = false;
 
-    output_message = "Choose";
-    asio::write(socket, asio::buffer(output_message));
+    sendMessage("Choose");
 
-    data_length = socket.read_some(asio::buffer(incoming_data));
-    incoming_message = std::string(incoming_data, data_length);
+    receiveMessage();
 
     if (incoming_message == "Login Request") userChoice = true;
 
@@ -48,15 +45,15 @@ void Server::userChoice() {
 
 
 bool Server::loginUser() {
+    std::cout << "Logging in...\n";
+    
     bool userFound = false;
 
     while (userFound == false) {
 
-        output_message = "Username Request";
-        asio::write(socket, asio::buffer(output_message));
+        sendMessage("Username Request");
 
-        data_length = socket.read_some(asio::buffer(incoming_data));
-        incoming_message = std::string(incoming_data, data_length);
+        receiveMessage();
 
         for (User user: users.getAllUsers()) {
             if (incoming_message == user.getUsername()) {
@@ -77,11 +74,9 @@ bool Server::loginUser() {
 
     while (!correctPassword && counter < 3) {
 
-        output_message = "Password Request";
-        asio::write(socket, asio::buffer(output_message));
+        sendMessage("Password Request");
 
-        data_length = socket.read_some(asio::buffer(incoming_data));
-        incoming_message = std::string(incoming_data, data_length);
+        receiveMessage();
 
         if (incoming_message == connected_user.getPassword()) {
             correctPassword = true;
@@ -95,8 +90,7 @@ bool Server::loginUser() {
     // User wrote wrong password 3 times
     if (!correctPassword) {
 
-        output_message = "Denied";
-        asio::write(socket,asio::buffer(output_message));
+        sendMessage("Denied");
 
         socket.close();
 
@@ -107,13 +101,59 @@ bool Server::loginUser() {
 
 
     // Correct password
-    output_message = "Accepted";
-    asio::write(socket, asio::buffer(output_message));
+    sendMessage("Accepted");
 
     return true;
 }
 
 
 void Server::registerUser() {
+    std::cout << "Registering...\n";
+    
+    // Choosing a username
+    sendMessage("Username Request");
 
+    while (true) {
+        std::string wanted_username = receiveMessage();
+        
+        bool userFound = false;
+        for (User user: users.getAllUsers()) {
+            if (user.getUsername() == wanted_username) {
+                userFound = true;
+                break;
+            }
+        }
+        if (!userFound) break;
+        else sendMessage("Username Already Used");
+    }
+
+    // Choosing a password
+    sendMessage("Password Request");
+
+    std::string wanted_password = receiveMessage();
+
+    sendMessage("Accepted");
+
+    // TODO: Saving to users.csv and adding to users in server.hpp
+}
+
+std::string Server::receiveMessage() {
+    data_length = socket.read_some(asio::buffer(incoming_data));
+    incoming_message = std::string(incoming_data, data_length);
+
+    #ifdef DEBUG_MESSAGES
+    std::cout << "\t - Message received: " << incoming_message << '\n';
+    #endif
+
+    return incoming_message;
+}
+
+std::string Server::sendMessage(std::string msg) {
+
+    #ifdef DEBUG_MESSAGES
+    std::cout << "\t - Message sent: " << msg << '\n';
+    #endif
+
+    asio::write(socket, asio::buffer(msg));
+    return msg;
 }

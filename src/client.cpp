@@ -18,21 +18,18 @@ void Client::establishTCPConnection() {
 
     std::cout << "Connected to server: " << socket.remote_endpoint().address() << ":" << socket.remote_endpoint().port() << '\n';
 
-    data_length = socket.read_some(asio::buffer(incoming_data));
+    receiveMessage();
 
-    std::cout << "Received from server: \"" << std::string(incoming_data, data_length) << "\"\n";
+    std::cout << "Received from server: \"" << incoming_message << "\"\n";
 
-    output_message = "Hello from client!";
-    asio::write(socket, asio::buffer(output_message));
+    output_message = sendMessage("Hello from client!");
 
     std::cout << "Sent to server: \"" << output_message << "\"\n";
 }
 
 
 void Client::userChoice() {
-    data_length = socket.read_some(asio::buffer(incoming_data));
-
-    incoming_message = std::string(incoming_data, data_length);
+    receiveMessage();
 
     if (incoming_message != "Choose") {
         std::cout << "Error: Server sent unexpected message\n";
@@ -48,8 +45,9 @@ void Client::userChoice() {
     } while (choiceString != "Login" && choiceString != "Register");
 
     if (choiceString == "Login") output_message = "Login Request";
+    else output_message = "Register Request";
     
-    asio::write(socket, asio::buffer(output_message));
+    sendMessage(output_message);
 
     if (output_message == "Login Request") { 
         loginUser();
@@ -64,22 +62,21 @@ bool Client::loginUser() {
 
     do {
 
-        data_length = socket.read_some(asio::buffer(incoming_data));
-        incoming_message = std::string(incoming_data, data_length);
+        receiveMessage();
 
         if (incoming_message == "Username Request") {
 
             std::cout << "Username: ";
 
             std::cin >> output_message;
-            asio::write(socket, asio::buffer(output_message));
+            sendMessage(output_message);
 
         } else if (incoming_message == "Password Request") {
 
             std::cout << "Password: ";
 
             std::cin >> output_message;
-            asio::write(socket, asio::buffer(output_message));
+            sendMessage(output_message);
 
         } else if (incoming_message == "Denied") {
 
@@ -98,4 +95,51 @@ bool Client::loginUser() {
 
 void Client::registerUser() {
     std::cout << "Registering...\n";
+
+    bool registered = false;
+
+    while (!registered) {
+        std::string request = receiveMessage();
+
+        if (request == "Username Request") {
+            std::cout << "Username: ";
+            std::cin >> output_message;
+
+            sendMessage(output_message);
+
+        } else if (request == "Username Already Used") {
+            std::cout <<"Username already used, please try another.\nUsername: ";
+            std::cin >> output_message;
+
+            sendMessage(output_message);
+
+        } else if (request == "Password Request") {
+            std::cout << "Password: ";
+            std::cin >> output_message;
+
+            sendMessage(output_message);
+
+        } else if (request == "Accepted") break;
+    }
+}
+
+std::string Client::receiveMessage() {
+    data_length = socket.read_some(asio::buffer(incoming_data));
+    incoming_message = std::string(incoming_data, data_length);
+
+    #ifdef DEBUG_MESSAGES
+    std::cout << "\t - Message received: " << incoming_message << '\n';
+    #endif
+
+    return incoming_message;
+}
+
+std::string Client::sendMessage(std::string msg) {
+
+    #ifdef DEBUG_MESSAGES
+    std::cout << "\t - Message sent: " << msg << '\n';
+    #endif
+
+    asio::write(socket, asio::buffer(msg));
+    return msg;
 }

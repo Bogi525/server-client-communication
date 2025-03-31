@@ -2,6 +2,7 @@
 #define _server_hpp_
 
 #define ASIO_STANDALONE
+#define DEBUG_MESSAGES
 
 #include <vector>
 #include <asio.hpp>
@@ -13,6 +14,7 @@
 
 class Server {
 public:
+
     static Server& get() {
         static Server instance;
         return instance;
@@ -27,9 +29,12 @@ public:
     void registerUser();
 
 private:
-    Server();
 
+    Server();
     ~Server() = default;
+
+    std::string receiveMessage();
+    std::string sendMessage(std::string);
 
     Users users;
     User connected_user;

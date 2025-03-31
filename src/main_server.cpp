@@ -23,6 +23,8 @@ int main() {
 
         Server::get().userChoice();
 
+        std::cout << "Chatting...\n";
+
       //   // TODO - messaging
 
       //   std::cout << incoming_message << "\t(R)\n";
