@@ -1,5 +1,6 @@
 #include "../inc/users.hpp"
 #include <filesystem>
+#include <sstream>
 
 #define FILEPATH "users.csv"
 
@@ -86,11 +87,37 @@ bool Users::createUser(std::string username, std::string password) {
 
 bool Users::addUserToFile(std::string username, std::string password) {
     
-    std::fstream file("users.csv", std::ios_base::app);
+    std::ifstream inFile("users.csv");
+    
+    if (!inFile) return false;
 
-    file << '\n' << username << "," << password;
+    int userCount;
 
-    file.close();
+    inFile >> userCount;
+    inFile.ignore();
+
+    userCount++;
+
+    std::string line;
+    std::stringstream contentStream;
+
+    contentStream << userCount << '\n';
+
+    while (std::getline(inFile, line)) {
+        contentStream << line << '\n';
+    }
+
+    contentStream << username << ',' << password;
+
+    inFile.close();
+
+    std::ofstream outFile("users.csv");
+
+    if (!outFile) return false;
+
+    outFile << contentStream.str();
+
+    outFile.close();
 
     return true;
 }
