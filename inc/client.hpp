@@ -26,7 +26,6 @@ public:
 
     bool loginUser();
 
-    // TODO: Implement
     void registerUser();
 
 private:

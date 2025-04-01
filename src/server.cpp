@@ -113,8 +113,10 @@ void Server::registerUser() {
     // Choosing a username
     sendMessage("Username Request");
 
+    std::string wanted_username = NULL_DATA;
+
     while (true) {
-        std::string wanted_username = receiveMessage();
+        wanted_username = receiveMessage();
         
         bool userFound = false;
         for (User user: users.getAllUsers()) {
@@ -132,9 +134,9 @@ void Server::registerUser() {
 
     std::string wanted_password = receiveMessage();
 
-    sendMessage("Accepted");
+    users.createUser(wanted_username, wanted_password);
 
-    // TODO: Saving to users.csv and adding to users in server.hpp
+    sendMessage("Accepted");
 }
 
 std::string Server::receiveMessage() {
