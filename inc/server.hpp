@@ -14,7 +14,6 @@
 
 class Server {
 public:
-
     static Server& get() {
         static Server instance;
         return instance;
@@ -29,7 +28,6 @@ public:
     void registerUser();
 
 private:
-
     Server();
     ~Server() = default;
 

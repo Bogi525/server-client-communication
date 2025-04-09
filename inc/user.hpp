@@ -15,11 +15,9 @@ public:
     std::string getPassword();
 
 private:
-
     std::string username;
     std::string password;
 
 };
-
 
 #endif

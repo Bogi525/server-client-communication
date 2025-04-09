@@ -8,7 +8,6 @@
 
 class Users {
 public:
-
     Users();
 
     Users(const Users&) = delete;
@@ -17,12 +16,11 @@ public:
     std::vector<User> getAllUsers();
 
     User getNullUser();
-    
     User getUser(std::string username);
+    
     bool createUser(std::string username, std::string password);
     
 private:
-
     bool addUserToFile(std::string username, std::string password);
 
     std::vector<User> users;

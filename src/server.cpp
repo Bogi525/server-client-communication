@@ -22,7 +22,6 @@ void Server::establishTCPConnection() {
     std::cout << "Sent to client: \"" << output_message << "\"\n";
 
     receiveMessage();
-
     std::cout << "Received from client: \"" << incoming_message << "\"\n";
 }
 
