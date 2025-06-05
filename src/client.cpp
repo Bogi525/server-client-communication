@@ -142,3 +142,25 @@ std::string Client::sendMessage(std::string msg) {
     asio::write(socket, asio::buffer(msg));
     return msg;
 }
+
+void Client::messaging() {
+
+    std::string message_to_send;
+    bool can_be_sent;
+
+    while (true) {
+        can_be_sent = false;
+
+        while (!can_be_sent) {
+            std::getline(std::cin, message_to_send);
+            if (message_to_send.size() < 1024) can_be_sent = true;
+        }
+
+        sendMessage(message_to_send);
+
+        if (message_to_send == "!finish") throw std::exception();
+        
+        receiveMessage();
+        
+    }
+}

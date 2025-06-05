@@ -27,6 +27,8 @@ public:
 
     void registerUser();
 
+    void messaging();
+
 private:
     Server();
     ~Server() = default;
@@ -49,6 +51,8 @@ private:
     asio::ip::tcp::socket socket;
 
     asio::ip::tcp::acceptor acceptor;
+
+    bool finished;
 };
 
 #endif

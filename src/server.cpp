@@ -5,6 +5,7 @@ Server::Server() : io_context(), socket(io_context), acceptor(io_context, asio::
     output_message = "";
     data_length = 0;
     incoming_message = "";
+    finished = false;
 
     std::cout << "Server is listening on port 12345...\n";
 }
@@ -157,4 +158,16 @@ std::string Server::sendMessage(std::string msg) {
 
     asio::write(socket, asio::buffer(msg));
     return msg;
+}
+
+void Server::messaging() {
+    while (!finished) {
+        receiveMessage();
+
+        if (incoming_message == "!finish") {
+            throw std::exception();
+        }
+
+        sendMessage("Message confirmed");
+    }
 }

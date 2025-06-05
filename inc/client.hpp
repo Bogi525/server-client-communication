@@ -28,6 +28,8 @@ public:
 
     void registerUser();
 
+    void messaging();
+
 private:
 
     Client();
