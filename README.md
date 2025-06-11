@@ -17,5 +17,5 @@ The client connects, registers or logs in, sends messages, and receives acknowle
 ## Technologies:
 - C++
 - Standalone Asio
-- GNU Makew
+- GNU Make
 - Developed in Visual Studio Code on Windows 11
