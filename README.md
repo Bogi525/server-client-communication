@@ -1,4 +1,21 @@
+# Client-Server Communication
 
-# client-server communication
+A basic synchronous TCP client-server application in C++ using the standalone Asio library. 
+Developed as a personal project to learn fundamental socket programming concepts, client authentication, message exchange, and port-forwarding.
 
-In this project, my aim is to learn how to use ASIO Standalone C++ library, familiarize myself with git bash further, and to organize and plan a project (other than these files, i have a physical notepad where I brainstorm/come up with solutions for pending problems)
+#
+This project implements a **single-client-at-a-time server** that supports user registration, login, and message exchange.
+The client connects, registers or logs in, sends messages, and receives acknowledgments from the server.
+
+## Features:
+
+- TCP socket communication with synchronous blocking calls
+- User registration and login functionality
+- Client-server message exchange with server acknowledgments
+- Handles one client connection at a time
+
+## Technologies:
+- C++
+- Standalone Asio
+- GNU Make
+- Developed in Visual Studio Code on Windows 11
