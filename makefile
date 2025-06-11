@@ -6,10 +6,10 @@ BUILD_CLIENT = build\client.exe
 all: clean build_server build_client
 
 build_server:
-	g++ -g -Ilib/asio $(SERVER_FILES) -o $(BUILD_SERVER) -lws2_32
+	g++ -g -Ilib $(SERVER_FILES) -o $(BUILD_SERVER) -lws2_32
 
 build_client:
-	g++ -g -Ilib/asio $(CLIENT_FILES) -o $(BUILD_CLIENT) -lws2_32
+	g++ -g -Ilib $(CLIENT_FILES) -o $(BUILD_CLIENT) -lws2_32
 	
 clean:
 	del $(BUILD_SERVER) $(BUILD_CLIENT)
