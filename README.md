@@ -1,4 +1,3 @@
-
 # Client-Server Communication
 
 A basic synchronous TCP client-server application in C++ using the standalone Asio library. 
