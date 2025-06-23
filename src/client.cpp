@@ -41,6 +41,7 @@ void Client::userChoice() {
         std::cout << "Choose whether you want to login or register by typing:\n";
         std::cout << "\"Login\" or \"Register\": ";
         std::cin >> choiceString;
+        std::cin.ignore();
     } while (choiceString != "Login" && choiceString != "Register");
 
     if (choiceString == "Login") output_message = "Login Request";
@@ -53,6 +54,9 @@ void Client::userChoice() {
     } else { 
         registerUser();
     }
+
+    std::cout << "Chatting...\n";
+    messaging();
 }
 
 
@@ -68,6 +72,7 @@ bool Client::loginUser() {
             std::cout << "Username: ";
 
             std::cin >> output_message;
+            std::cin.ignore();
             sendMessage(output_message);
 
         } else if (incoming_message == "Password Request") {
@@ -75,6 +80,7 @@ bool Client::loginUser() {
             std::cout << "Password: ";
 
             std::cin >> output_message;
+            std::cin.ignore();
             sendMessage(output_message);
 
         } else if (incoming_message == "Denied") {
@@ -103,18 +109,21 @@ void Client::registerUser() {
         if (request == "Username Request") {
             std::cout << "Username: ";
             std::cin >> output_message;
+            std::cin.ignore();
 
             sendMessage(output_message);
 
         } else if (request == "Username Already Used") {
             std::cout <<"Username already used, please try another.\nUsername: ";
             std::cin >> output_message;
+            std::cin.ignore();
 
             sendMessage(output_message);
 
         } else if (request == "Password Request") {
             std::cout << "Password: ";
             std::cin >> output_message;
+            std::cin.ignore();
 
             sendMessage(output_message);
 
@@ -152,8 +161,13 @@ void Client::messaging() {
         can_be_sent = false;
 
         while (!can_be_sent) {
+
+            #ifdef DEBUG_MESSAGES
+            std::cout << "Can Be Sent == FALSE\n";
+            #endif
+
             std::getline(std::cin, message_to_send);
-            if (message_to_send.size() < 1024) can_be_sent = true;
+            if (message_to_send.size() < 1024 && message_to_send.size() > 0) can_be_sent = true;
         }
 
         sendMessage(message_to_send);

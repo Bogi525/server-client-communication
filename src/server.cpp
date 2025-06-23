@@ -41,6 +41,9 @@ void Server::userChoice() {
     } else {
         registerUser();
     }
+
+    std::cout << "Chatting...\n";
+    messaging();
 }
 
 
