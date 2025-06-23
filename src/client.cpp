@@ -1,7 +1,10 @@
 #include "../inc/client.hpp"
 
 Client::Client() : io_context(), socket(io_context), resolver(io_context) {
-    server_ip = LOCALHOST_IP;
+    
+    std::cout << "Insert IPv4 Address: ";
+    std::cin >> server_ip;
+    // server_ip = LOCALHOST_IP;
 
     output_message = "";
     data_length = 0;

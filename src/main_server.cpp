@@ -27,6 +27,7 @@ int main() {
 
      } catch (std::exception& e) {
         std::cout << "Error: " << e.what() << '\n';
+        system("pause");
      }
      
      return 0;
