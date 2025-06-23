@@ -9,7 +9,7 @@ build_server:
 	g++ -g -Ilib $(SERVER_FILES) -o $(BUILD_SERVER) -lws2_32
 
 build_client:
-	g++ -g -Ilib $(CLIENT_FILES) -o $(BUILD_CLIENT) -lws2_32
+	g++ -g -Ilib $(CLIENT_FILES) -o $(BUILD_CLIENT) -lws2_32 -static
 	
 clean:
 	del $(BUILD_SERVER) $(BUILD_CLIENT)
